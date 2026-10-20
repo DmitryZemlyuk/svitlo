@@ -1,6 +1,6 @@
 'use strict';
 // Offline shell + last schedule, and web push.
-const CACHE = 'svitlo-v5';
+const CACHE = 'svitlo-v6';
 const SHELL = ['./', 'index.html', 'style.css', 'i18n.js', 'app.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/badge-96.png'];
 
 self.addEventListener('install', (e) => {

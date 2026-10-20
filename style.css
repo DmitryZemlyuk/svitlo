@@ -1,7 +1,7 @@
 :root {
   --bg: #12171D; --card: #1B222A; --raise: #232B35; --line: rgba(255,255,255,.07); --line2: rgba(255,255,255,.16);
   --text: #FFFFFF; --muted: rgba(255,255,255,.66); --dim: rgba(255,255,255,.55);
-  --hot: #F5A524; --hot-hi: #FFC35C; --hot-bg: rgba(245,165,36,.14); --hot-line: rgba(245,165,36,.42); --on: rgba(95,191,127,.26); --green: #5FBF7F;
+  --hot: #F5A524; --hot-hi: #FFC35C; --hot-bg: rgba(245,165,36,.14); --hot-line: rgba(245,165,36,.42); --on: rgba(95,191,127,.26); --green: #5FBF7F; --off: #EF6B5F;
   --r: 24px;
   color-scheme: dark;
 }
@@ -44,7 +44,7 @@ main.narrow { max-width: 560px; }
 .chip-sub { color: var(--dim); font-weight: 500; }
 .chip.on .chip-sub { color: rgba(255,255,255,.7); }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); display: block; flex-shrink: 0; }
-.dot.off { background: var(--hot); }
+.dot.off { background: var(--off); }
 .segs { display: flex; padding: 3px; border-radius: 22px; background: rgba(255,255,255,.07); }
 .seg { min-width: 44px; min-height: 38px; padding: 0 10px; border: 0; border-radius: 19px; background: transparent; color: var(--muted); font-weight: 600; font-size: 13px; cursor: pointer; }
 .seg.on { background: #fff; color: var(--bg); }
@@ -90,14 +90,14 @@ aside { flex: 1 1 300px; display: flex; flex-direction: column; gap: 24px; min-w
 .headline { font-size: 36px; font-weight: 600; letter-spacing: -.5px; line-height: 1.1; }
 .detail { font-size: 17px; color: rgba(255,255,255,.78); margin-top: 4px; }
 .detail b { color: #fff; font-weight: 600; }
-.detail b.hot { color: var(--hot); }
+.detail b.hot { color: var(--off); }
 .nw { white-space: nowrap; }
 
 .day { display: flex; flex-direction: column; gap: 8px; }
 .sub-h { font-size: 14px; font-weight: 600; }
 .bar { position: relative; display: flex; gap: 3px; height: 32px; }
 .c { flex: 1; min-width: 0; border-radius: 3px; background: var(--on); display: block; }
-.c.x { background: var(--hot); }
+.c.x { background: var(--off); }
 .c.past { opacity: .4; }
 .now { position: absolute; top: -6px; bottom: -6px; width: 2px; margin-left: -1px; border-radius: 1px; background: #fff; display: block; pointer-events: none; }
 .scale { position: relative; height: 24px; font-size: 11px; }
@@ -114,7 +114,7 @@ aside { flex: 1 1 300px; display: flex; flex-direction: column; gap: 24px; min-w
 
 .wins { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .wins li { display: flex; justify-content: space-between; gap: 12px; font-size: 15px; }
-.wins li .hot { font-weight: 600; }
+.wins li .hot { font-weight: 600; color: var(--off); }
 .wins li.past { color: var(--dim); }
 .wins li.past span:first-child { text-decoration: line-through; }
 .notice { display: flex; flex-direction: column; gap: 8px; }
