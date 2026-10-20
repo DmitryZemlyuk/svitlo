@@ -449,7 +449,7 @@
       hi = Math.min(hi, Math.max(shown.length - 1, 0));
       if (!all.length && !q) { close(); return; }
       list.innerHTML = shown.length ? shown.map((x, i) => `<button type="button" role="option" class="opt ${i === hi ? 'hi' : ''}" data-i="${i}"><span>${esc(x.name)}</span>${x.hint ? `<span class="muted small">${esc(x.hint)}</span>` : ''}</button>`).join('')
-        : (all.length ? `<div class="opt none muted">${esc(L().nothing)}</div>` : `<div class="opt none muted">${esc(L().loading)}</div>`);
+        : (all.length ? `<div class="opt none muted">${esc(L().nothing)}</div>` : `<div class="opt none muted">${esc(form.err ? L().loadFail : L().loading)}</div>`);
       list.hidden = false; input.setAttribute('aria-expanded', 'true');
       list.querySelectorAll('[data-i]').forEach((b) => b.onmousedown = (e) => { e.preventDefault(); pick(shown[+b.dataset.i]); });
     };
