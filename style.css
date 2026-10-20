@@ -1,7 +1,7 @@
 :root {
   --bg: #12171D; --card: #1B222A; --raise: #232B35; --line: rgba(255,255,255,.07); --line2: rgba(255,255,255,.16);
   --text: #FFFFFF; --muted: rgba(255,255,255,.66); --dim: rgba(255,255,255,.55);
-  --hot: #F5A524; --hot-hi: #FFC35C; --hot-bg: rgba(245,165,36,.14); --hot-line: rgba(245,165,36,.42); --on: rgba(255,255,255,.18);
+  --hot: #F5A524; --hot-hi: #FFC35C; --hot-bg: rgba(245,165,36,.14); --hot-line: rgba(245,165,36,.42); --on: rgba(95,191,127,.26); --green: #5FBF7F;
   --r: 24px;
   color-scheme: dark;
 }
@@ -43,7 +43,7 @@ main.narrow { max-width: 560px; }
 .chips.fade-l.fade-r { -webkit-mask-image: linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 48px), transparent); mask-image: linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 48px), transparent); }
 .chip-sub { color: var(--dim); font-weight: 500; }
 .chip.on .chip-sub { color: rgba(255,255,255,.7); }
-.dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.45); display: block; flex-shrink: 0; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); display: block; flex-shrink: 0; }
 .dot.off { background: var(--hot); }
 .segs { display: flex; padding: 3px; border-radius: 22px; background: rgba(255,255,255,.07); }
 .seg { min-width: 44px; min-height: 38px; padding: 0 10px; border: 0; border-radius: 19px; background: transparent; color: var(--muted); font-weight: 600; font-size: 13px; cursor: pointer; }
