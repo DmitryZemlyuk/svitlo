@@ -224,7 +224,7 @@
       ${offline ? `<p class="warn small">${esc(t.offline)}</p>` : ''}
       <div class="cols"><div class="left">
         <section class="card status o1">
-          <div class="meta"><span>${svg(IC.pin)}${esc(addrLine)}${a.type === 'biz' ? ' · ' + esc(t.bizTag) : ''} · ${esc(t.sub)} ${esc(a.sub || '—')}</span>
+          <div class="meta"><span>${svg(IC.pin)}${esc(addrLine)}${a.type === 'biz' ? ' · ' + esc(t.bizTag) : ''} · ${esc(t.sub)} ${esc(a.sub || '–')}</span>
             <span class="${stale ? 'warn' : ''}">${esc(upd)}${stale ? ' · ' + esc(t.stale) : ''}<button class="link" id="edit">${svg(IC.edit)}${esc(t.edit)}</button></span></div>
           <div class="state"><div class="tile ${a.sub && bits && !isOff ? 'hot-tile' : ''} big">${svg(IC.bolt)}</div>
             <div><div class="headline">${esc(headline)}</div><div class="detail">${detail}</div></div></div>
