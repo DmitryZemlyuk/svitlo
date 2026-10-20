@@ -14,4 +14,4 @@ Live at https://dmitryzemlyuk.github.io/svitlo/
 Addresses are stored in the browser's localStorage. The schedule and notifications come from a small
 self-hosted service; it only knows the addresses of devices with notifications on.
 
-Plain HTML, CSS and JavaScript, no build step. Published with GitHub Pages from the `main` branch.
+The files here are a minified and obfuscated build of the page, published with GitHub Pages from the `main` branch.
