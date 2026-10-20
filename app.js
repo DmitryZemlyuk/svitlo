@@ -330,7 +330,11 @@
           if (s) { await api('unsubscribe', {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({endpoint: s.endpoint})}).catch(() => {}); await s.unsubscribe(); }
           store.push = false;
         }
-      } catch (e) { store.push = false; pushMsg = e.message === t.notifDenied ? e.message : t.notifFail; }
+      } catch (e) {
+        store.push = false;
+        pushMsg = e.message === t.notifDenied ? e.message : e.message === 'subscriptions limit' ? t.notifLimit : t.notifFail;
+        if (e.message === 'subscriptions limit') currentSub().then((x) => x && x.unsubscribe()).catch(() => {});
+      }
       save(); relockLater(); render();
     };
     app.querySelectorAll('[data-pref]').forEach((c) => c.onchange = () => { store.prefs[c.dataset.pref] = c.checked; save(); syncPush(); relockLater(); });
