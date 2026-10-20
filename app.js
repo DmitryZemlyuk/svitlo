@@ -85,6 +85,12 @@
     if (changed) { save(); syncPush(); if (view === 'main') render(); }
   }
 
+  // the grid districts (REM) as on the oblenergo site: the form works even before the first answer from the server
+  const REMS = [[1, 'Андрушівський'], [2, 'Баранівський'], [3, 'Бердичівський'], [4, 'Брусилівський'], [7, 'Житомирський'],
+    [16, 'Звягельський'], [9, 'Коростенський'], [11, 'Коростишівський'], [13, 'Любарський'], [14, 'Малинський'], [17, 'Овруцький'],
+    [18, 'Олевський'], [19, 'Попільнянський'], [23, 'Пулинський'], [20, 'Радомишльський'], [21, 'Романівський'], [5, 'Хорошівський'],
+    [24, 'Черняхівський'], [25, 'Чуднівський']].map(([id, name]) => ({id, name}));
+
   // ------------------------------------------------------------------------------------------- views
   let view = !store.lang ? 'welcome' : store.addresses.length ? 'main' : 'form';
   let form = null; // address being edited
@@ -365,7 +371,7 @@
       if (f.place && !f.lists.streets) f.lists.streets = await api(`streets?rem=${f.rem}&place=${f.place}`);
       if (f.street && !f.lists.houses) { const h = await api(`houses?rem=${f.rem}&place=${f.place}&street=${f.street}&type=${f.type}`); f.lists.houses = h.houses; f.lists.streetSub = h.sub; }
       f.err = '';
-    } catch { f.err = L().loadFail; }
+    } catch { f.err = L().noServer; }
     if (form === f && view === 'form') { updateResult(); }
   }
 
@@ -373,7 +379,7 @@
     const t = L();
     if (!form) openForm(null);
     const f = form;
-    const rems = data?.rems || [];
+    const rems = data?.rems?.length ? data.rems : REMS;
     const canBack = store.addresses.length > 0;
     app.innerHTML = `<main class="narrow">
       <header class="formtop">${canBack ? `<button class="round" id="back" aria-label="${esc(t.back)}">${svg(IC.back)}</button>` : `<div class="tile hot-tile">${svg(IC.bolt)}</div>`}
@@ -393,7 +399,7 @@
         ${f.index != null ? `<button class="ghost danger" type="button" id="del">${esc(t.del)}</button>` : ''}
       </form>
       <p class="muted small privacy">${svg(IC.lock)}<span>${esc(t.privacy)}</span></p></main>`;
-    if (!rems.length) api('state').then((d) => { data = d; if (view === 'form' && form === f) renderForm(); }).catch(() => {});
+    if (!data?.rems?.length) api('state').then((d) => { data = d; f.err = ''; if (view === 'form' && form === f) updateResult(); }).catch(() => { f.err = L().noServer; updateResult(); });
 
     app.querySelectorAll('[data-lang]').forEach((b) => b.onclick = () => { store.lang = b.dataset.lang; save(); render(); });
     const back = app.querySelector('#back');
@@ -478,10 +484,13 @@
       if (hint) hint.textContent = f.lists.streetSub ? t.houseOptional : '';
     } else if (f.street) msg = t.loading;
     if (f.err) msg = f.err;
+    const retry = f.err ? ` <button type="button" class="link" id="retry">${esc(t.retry)}</button>` : '';
     f.sub = sub;
     box.innerHTML = sub ? `<div class="result">${svg(IC.bolt, 'hot')}<div><b>${esc(t.result(sub.split('.')[0], sub))}</b>
       <span class="muted small">${esc(f.streetName)}${f.house ? ', ' + esc(f.house) : ''}</span></div></div>`
-      : msg ? `<p class="muted small">${esc(msg)}</p>` : '';
+      : msg ? `<p class="${f.err ? 'warn' : 'muted'} small">${esc(msg)}${retry}</p>` : '';
+    const rb = box.querySelector('#retry');
+    if (rb) rb.onclick = () => { f.err = ''; updateResult(); loadLists(); };
     const s = app.querySelector('#save');
     if (s) s.disabled = !sub;
   }
