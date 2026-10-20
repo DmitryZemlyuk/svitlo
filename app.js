@@ -314,9 +314,14 @@
   const payload = (subscription) => JSON.stringify({subscription, lang: store.lang, prefs: store.prefs,
     addresses: store.addresses.map(({label, rem, place, street, house, type, sub}) => ({label, rem, place, street, house, type: type || 'home', sub}))});
   async function currentSub() { const reg = await navigator.serviceWorker.ready; return reg.pushManager.getSubscription(); }
+  /** the service worker needs the current endpoint to hand a browser-replaced subscription over to the server */
+  const rememberEndpoint = (ep) => caches.open('svitlo-meta').then((c) => ep ? c.put('endpoint', new Response(ep)) : c.delete('endpoint')).catch(() => {});
   async function syncPush() {
     if (!store.push || !pushSupported()) return;
-    try { const s = await currentSub(); if (s) await api('subscribe', {method: 'POST', headers: {'content-type': 'application/json'}, body: payload(s)}); } catch {}
+    try {
+      const s = await currentSub();
+      if (s) { await api('subscribe', {method: 'POST', headers: {'content-type': 'application/json'}, body: payload(s)}); rememberEndpoint(s.endpoint); }
+    } catch {}
   }
   function wirePush() {
     const box = app.querySelector('#push');
@@ -330,10 +335,12 @@
           const {key} = await api('vapid');
           const s = (await reg.pushManager.getSubscription()) || await reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: b64(key)});
           await api('subscribe', {method: 'POST', headers: {'content-type': 'application/json'}, body: payload(s)});
+          rememberEndpoint(s.endpoint);
           store.push = true;
         } else {
           const s = await currentSub();
           if (s) { await api('unsubscribe', {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({endpoint: s.endpoint})}).catch(() => {}); await s.unsubscribe(); }
+          rememberEndpoint(null);
           store.push = false;
         }
       } catch (e) {
@@ -498,6 +505,7 @@
   // ------------------------------------------------------------------------------------------- start
   render();
   refresh().then(() => { if (store.addresses.length) recheck(); });
+  syncPush(); // re-sends the subscription on every visit: covers browsers that replace it without telling the worker (Safari)
   setInterval(() => { if (view === 'main' && !document.hidden) render(); }, 30e3);
   setInterval(() => { if (!document.hidden) refresh(); }, 60e3);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { refresh(); } });
